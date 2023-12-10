@@ -4,10 +4,11 @@ const {
     Menu,
     Tray,
     systemPreferences,
+    clipboard,
 } = require('electron');
 
 let tray = null;
-
+const clippings = [];
 const getAppIcon = () => {
     if(process.platform === 'win32')
     {
@@ -29,6 +30,39 @@ const getAppIcon = () => {
     return 'imgs/icon-dark.png';
 }
 
+const updateTrayMenu = () => {
+    const menu = Menu.buildFromTemplate([
+        {
+            label: 'Create New Clipping',
+            click() {addClipping();},
+            accelerator: 'CommandOrControl+Shif+C',
+        },
+        {
+            type: 'separator'
+        },
+        ...clippings.map((clipping, index) => ({label: clipping})),
+        {
+            type: 'separator'
+        },
+        {
+            label: 'Quit',
+            click() {app.quit();},
+            accelerator: 'CommandOrControl+Q'
+        }
+    ]);
+
+    tray.setContextMenu(menu);
+}
+
+const addClipping = () => {
+    const clipping = clipboard.readText();
+    
+    clippings.push(clipping);
+    updateTrayMenu();
+
+    return clipping;
+}
+
 app.on('ready', () => {
     if(app.dock)
     {
@@ -36,19 +70,12 @@ app.on('ready', () => {
     }
 
     tray = new Tray(path.join(__dirname, getAppIcon()));
+    tray.setToolTip('Clipboard Master');
 
     if(process.platform === 'win32')
     {
         tray.on('click', tray.popUpContextMenu);
     }
 
-    const menu = Menu.buildFromTemplate([
-        {
-            label: 'Quit',
-            click() {app.quit();}
-        }
-    ]);
-
-    tray.setToolTip('Clipboard Master');
-    tray.setContextMenu(menu);
+    updateTrayMenu();
 });
