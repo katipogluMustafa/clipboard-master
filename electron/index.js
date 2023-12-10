@@ -30,6 +30,16 @@ const getAppIcon = () => {
     return 'imgs/icon-dark.png';
 }
 
+const createClippingMenuItem = (clipping, index) => {
+    return {
+        label: clipping,
+        click() {
+            clipboard.writeText(clipping);
+        },
+        accelerator: `CommandOrControl+${index}`
+    };
+};
+
 const updateTrayMenu = () => {
     const menu = Menu.buildFromTemplate([
         {
@@ -40,7 +50,7 @@ const updateTrayMenu = () => {
         {
             type: 'separator'
         },
-        ...clippings.map((clipping, index) => ({label: clipping})),
+        ...clippings.map(createClippingMenuItem),
         {
             type: 'separator'
         },
