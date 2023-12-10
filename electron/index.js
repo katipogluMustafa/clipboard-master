@@ -111,6 +111,11 @@ app.on('ready', () => {
         tray.on('click', tray.popUpContextMenu);
     }
 
+    if(process.platform === 'darwin')
+    {
+        tray.setPressedImage('imgs/Icon-light.png');
+    }
+
     browserWindow = new BrowserWindow({
         nodeIntegration: true,
         sandbox: false,
