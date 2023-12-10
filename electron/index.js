@@ -87,7 +87,7 @@ const addClipping = () => {
         return;
     }
     
-    clippings.push(clipping);
+    clippings.unshift(clipping);
     updateTrayMenu();    
     
     return clipping;
