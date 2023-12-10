@@ -6,10 +6,13 @@ const {
     systemPreferences,
     clipboard,
     globalShortcut,
+    BrowserWindow,
 } = require('electron');
 
 let tray = null;
 const clippings = [];
+let browserWindow = null;
+
 const getAppIcon = () => {
     if(process.platform === 'win32')
     {
@@ -108,6 +111,16 @@ app.on('ready', () => {
         tray.on('click', tray.popUpContextMenu);
     }
 
+    browserWindow = new BrowserWindow({
+        nodeIntegration: true,
+        sandbox: false,
+        worldSafeExecuteJavascript: false,
+        contextIsolation: false,
+        show: false,
+    });
+    
+    browserWindow.webContents.loadFile(path.join(__dirname, 'index.html'));
+
     const osWideActivationShortcut = globalShortcut.register(
         'CommandOrControl+Option+C',
         () => { tray.popUpContextMenu(); }
@@ -120,7 +133,13 @@ app.on('ready', () => {
 
     const osWideNewClippingShortcut = globalShortcut.register(
         'CommandOrControl+Shift+Option+C',
-        () =>{ addClipping(); },
+        () =>{ 
+            const clipping = addClipping(); 
+            if(clipping)
+            {
+                browserWindow.webContents.send('show-notification', 'Clipping Added', clipping);
+            }
+        },
     );
 
     if(!osWideNewClippingShortcut)
