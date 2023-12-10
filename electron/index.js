@@ -82,9 +82,14 @@ const updateTrayMenu = () => {
 const addClipping = () => {
     const clipping = clipboard.readText();
     
+    if(clippings.includes(clipping))
+    {
+        return;
+    }
+    
     clippings.push(clipping);
-    updateTrayMenu();
-
+    updateTrayMenu();    
+    
     return clipping;
 }
 
