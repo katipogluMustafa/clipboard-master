@@ -2,8 +2,9 @@
   "name": "clipboard-master",
   "version": "0.1.0",
   "description": "A simple desktop tray clipboard manager",
-  "main": "index.js",
+  "main": "electron/index.js",
   "scripts": {
+    "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/katipogluMustafa/clipboard-master/issues"
   },
-  "homepage": "https://github.com/katipogluMustafa/clipboard-master#readme"
+  "homepage": "https://github.com/katipogluMustafa/clipboard-master#readme",
+  "dependencies": {
+    "electron": "^28.0.0"
+  }
 }
