@@ -30,9 +30,24 @@ const getAppIcon = () => {
     return 'imgs/icon-dark.png';
 }
 
+const getClippingShortLabel = (clipping) => {
+    let shortLabel = null;
+
+    if(clipping.length > 20)
+    {
+        shortLabel = clipping.slice(0, 20) + '...';
+    }
+    else
+    {
+        shortLabel = clipping;
+    }
+
+    return shortLabel;
+}
+
 const createClippingMenuItem = (clipping, index) => {
     return {
-        label: clipping,
+        label: getClippingShortLabel(clipping),
         click() {
             clipboard.writeText(clipping);
         },
